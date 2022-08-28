@@ -28,14 +28,11 @@
 (defvar alloy-font-lock-keywords
   ;; keywords
   `(,(rx symbol-start
-         (or "sig" "fun" "det" "let" "extends" "abstract"
-             "static" "disj" "option" "set" "all"
-             "one" "lone" "some" "sole" "open"
-             "uses" "run" "check" "eval" "for" "but" "none" "exactly"
-             "univ" "iden" "in" "no" "not"
-             "with" "sum" "if" "then" "else"
-             "pred" "iff" "implies"
-             "and" "or" ;; "=>" "=" "+" "-"
+         (or "abstract" "after" "all" "always" "and" "as" "assert" "before" "but" "check" 
+             "disj" "else" "enabled" "event" "eventually" "exactly" "extends" "fact" "for" 
+             "fun" "historically" "iden" "iff" "implies" "in" "Int" "invariant" "let" 
+             "lone" "modifies" "module" "no" "none" "not" "once" "one" "open" "or" "pred" 
+             "releases" "run" "set" "sig" "since" "some" "steps" "sum" "triggered" "univ"
              )
          symbol-end)
     ;; block introducing keywords with immediately following colons.
@@ -46,7 +43,8 @@
     (,(lambda (limit)
         (let ((limit (or (save-excursion (re-search-forward "{" limit t))
                          limit))
-              (sig-start (rx (zero-or-one (or "lone" "abstract" "one") (+ blank)) "sig"))
+              (sig-start (rx (zero-or-one (or "var" "lone" "some" "abstract" "one") (+ blank)) 
+                             "sig"))
               (sig-name (rx symbol-start
                             (group (and (1+ (or letter digit))
                                         (* (or letter digit ?_))))
@@ -65,6 +63,10 @@
      (1 font-lock-function-name-face))
     ;; module
     (,(rx symbol-start (* blank)
+          (and (1+ (or letter digit)) (* (or letter digit ?_))))
+     (1 font-lock-function-name-face))
+    ;; predicates
+    (,(rx symbol-start "pred" (* blank)
           (and (1+ (or letter digit)) (* (or letter digit ?_))))
      (1 font-lock-function-name-face))
     ))
@@ -174,7 +176,7 @@
   "Alloy-mode customizations."
   :group 'languages)
 
-(defcustom alloy-basic-offset 3
+(defcustom alloy-basic-offset 2
   "Basic indentation offset."
   :type 'integer :group 'alloy)
 
